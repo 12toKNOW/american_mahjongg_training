@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mah Jongg — A Family Learning Guide</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  /* ============================================
+     PALETTE — inspired by traditional mahjong sets
+     (cream tile, vermillion red, jade green, ink)
+     ============================================ */
+  :root {
+    --bg: #f5ebd6;          /* warm tile cream */
+    --bg-soft: #efe2c4;     /* slightly darker cream for panels */
+    --bg-card: #fffaf0;     /* tile face */
+    --ink: #2a1f1a;         /* dark ink */
+    --ink-soft: #6b5a4e;
+    --accent: #c8351e;      /* vermillion (Red Dragon) */
+    --accent-dark: #962614;
+    --jade: #2b6e4f;        /* jade (Green Dragon) */
+    --gold: #c89028;        /* lacquered gold */
+    --line: #2a1f1a;
+    --line-soft: #c9b890;
+
+    /* Tile family colors */
+    --crak: #c8351e;        /* red - Craks traditionally red */
+    --bam: #2b6e4f;         /* jade - Bams green */
+    --dot: #1e4d7b;         /* deep blue - Dots */
+    --wind: #4a3a2a;        /* brown - Winds */
+    --dragon-r: #c8351e;
+    --dragon-g: #2b6e4f;
+    --dragon-w: #6b5a4e;
+    --flower: #c8351e;
+    --joker: #962614;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body {
+    background: var(--bg);
+    color: var(--ink);
+    font-family: 'Source Sans 3', system-ui, sans-serif;
+    line-height: 1.6;
+  }
+  body { min-height: 100vh; }
+
+  /* ============================================
+     LAYOUT — sidebar + main
+     ============================================ */
+  .app { display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: 280px;
+    flex-shrink: 0;
+    background: var(--ink);
+    color: var(--bg);
+    padding: 28px 22px;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+  }
+  .sidebar h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    line-height: 1.1;
+  }
+  .sidebar .subtitle {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--gold);
+    margin-bottom: 24px;
+  }
+  .sidebar h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin: 22px 0 10px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid rgba(200, 144, 40, 0.3);
+  }
+  .nav-list { list-style: none; }
+  .nav-list li {
+    margin-bottom: 2px;
+  }
+  .nav-list button {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: none;
+    border: none;
+    color: var(--bg);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 14px;
+    padding: 8px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+    line-height: 1.3;
+  }
+  .nav-list button:hover { background: rgba(255,255,255,0.08); }
+  .nav-list button.active { background: var(--accent); color: #fff; }
+  .nav-list .icon { display: inline-block; width: 24px; }
+
+  .main {
+    flex: 1;
+    padding: 40px 48px 60px;
+    max-width: 920px;
+  }
+
+  /* ============================================
+     VIEWS
+     ============================================ */
+  .view { display: none; }
+  .view.active { display: block; }
+  .view header {
+    margin-bottom: 28px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--ink);
+  }
+  .view h1 {
+    font-family: 'Cinzel', serif;
+    font-size: 36px;
+    letter-spacing: 0.02em;
+    margin-bottom: 4px;
+    line-height: 1.1;
+  }
+  .view .lead {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 19px;
+    color: var(--ink-soft);
+  }
+
+  .view h2 {
+    font-family: 'Cinzel', serif;
+    font-size: 22px;
+    margin: 26px 0 10px;
+  }
+  .view h3 {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    margin: 22px 0 8px;
+  }
+  .view p { margin-bottom: 12px; }
+  .view ul, .view ol { margin: 8px 0 14px 22px; }
+  .view li { margin-bottom: 6px; }
+  .view code {
+    font-family: 'Courier New', monospace;
+    background: var(--bg-soft);
+    padding: 2px 6px;
+    border-radius: 3px;
+    font-size: 14px;
+  }
+
+  /* ============================================
+     REFERENCE TABLES
+     ============================================ */
+  .ref-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 14px 0;
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 4px;
+    overflow: hidden;
+  }
+  .ref-table th {
+    background: var(--ink);
+    color: var(--bg);
+    padding: 10px 14px;
+    text-align: left;
+    font-family: 'Cinzel', serif;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .ref-table td {
+    padding: 10px 14px;
+    border-top: 1px solid var(--line-soft);
+    font-size: 15px;
+  }
+  .ref-table .total-row td { background: var(--bg-soft); font-weight: 700; }
+
+  /* ============================================
+     TILES — visual rendering
+     ============================================ */
+  .tile {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 54px;
+    height: 70px;
+    background: linear-gradient(180deg, #fffdf4 0%, #f5ecd0 100%);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    margin: 4px;
+    box-shadow: 2px 3px 0 rgba(42, 31, 26, 0.25);
+    color: var(--ink);
+    font-family: 'Cinzel', serif;
+    font-size: 24px;
+    font-weight: 700;
+    position: relative;
+    user-select: none;
+    flex-direction: column;
+    padding: 4px;
+  }
+  .tile.large {
+    width: 78px;
+    height: 100px;
+    font-size: 32px;
+  }
+  .tile.small {
+    width: 42px;
+    height: 54px;
+    font-size: 18px;
+    border-width: 1.5px;
+    border-radius: 4px;
+  }
+  .tile .num { font-size: 1.1em; line-height: 1; }
+  .tile .marker { font-size: 0.55em; opacity: 0.7; line-height: 1; margin-top: 2px; font-family: 'Source Sans 3', sans-serif; font-weight: 600; letter-spacing: 0.06em; }
+
+  .tile.crak { color: var(--crak); }
+  .tile.bam { color: var(--bam); }
+  .tile.dot { color: var(--dot); }
+  .tile.wind { color: var(--wind); background: linear-gradient(180deg, #fffdf4 0%, #ebe0c4 100%); }
+  .tile.dragon-r { color: var(--dragon-r); }
+  .tile.dragon-g { color: var(--dragon-g); }
+  .tile.dragon-w { color: var(--dragon-w); }
+  .tile.flower {
+    color: var(--flower);
+    background: linear-gradient(135deg, #fffdf4 0%, #f8e8d8 50%, #fffdf4 100%);
+  }
+  .tile.joker {
+    background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+    color: #fff;
+    font-size: 13px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+  .tile.joker .num { font-size: 13px; font-family: 'Cinzel', serif; font-weight: 700; }
+
+  /* Tile row layout */
+  .tile-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0;
+    margin: 14px 0;
+    padding: 14px;
+    background: var(--bg-soft);
+    border-radius: 6px;
+    border: 1px solid var(--line-soft);
+  }
+  .tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(64px, 1fr));
+    gap: 8px;
+    margin: 16px 0;
+  }
+  .tile-grid .tile {
+    margin: 0;
+    width: 100%;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s;
+  }
+  .tile-grid .tile:hover {
+    transform: translateY(-2px);
+    box-shadow: 3px 5px 0 rgba(42, 31, 26, 0.35);
+  }
+
+  /* ============================================
+     TRAINER (Flashcards)
+     ============================================ */
+  .trainer {
+    text-align: center;
+  }
+  .trainer-controls {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+  }
+  .trainer-controls select,
+  .trainer-controls button {
+    padding: 8px 16px;
+    border: 2px solid var(--ink);
+    background: var(--bg-card);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .trainer-controls button {
+    background: var(--ink);
+    color: var(--bg);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+  }
+  .trainer-controls button:hover { background: var(--accent); }
+  .flashcard {
+    display: inline-block;
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 8px;
+    padding: 32px 40px;
+    box-shadow: 6px 6px 0 var(--ink);
+    margin: 20px 0;
+    min-width: 280px;
+  }
+  .flashcard .reveal {
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line-soft);
+    display: none;
+  }
+  .flashcard .reveal.shown { display: block; }
+  .flashcard h3 {
+    color: var(--ink);
+    margin: 0 0 6px;
+    font-family: 'Cinzel', serif;
+    font-size: 20px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .flashcard .notes {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 16px;
+    color: var(--ink-soft);
+    max-width: 320px;
+    margin: 0 auto;
+  }
+  .flashcard .progress {
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 13px;
+    color: var(--ink-soft);
+    margin-bottom: 8px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .flashcard .stats {
+    margin-top: 16px;
+    font-size: 14px;
+    color: var(--ink-soft);
+  }
+  .flashcard .stats strong { color: var(--jade); }
+  .flashcard .stats .wrong { color: var(--accent); }
+  .trainer-actions {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 16px;
+    flex-wrap: wrap;
+  }
+  .trainer-actions button {
+    padding: 10px 22px;
+    border: 2px solid var(--ink);
+    background: var(--bg-card);
+    color: var(--ink);
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+  }
+  .trainer-actions button.primary { background: var(--ink); color: var(--bg); }
+  .trainer-actions button:hover { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .trainer-actions button.correct:hover { background: var(--jade); border-color: var(--jade); color: #fff; }
+
+  /* ============================================
+     HAND EXAMPLES
+     ============================================ */
+  .hand-card {
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    border-radius: 6px;
+    padding: 22px;
+    margin-bottom: 22px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .hand-card h3 {
+    margin: 0 0 4px;
+    font-family: 'Cinzel', serif;
+    font-size: 18px;
+    color: var(--accent);
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .hand-card .pattern {
+    font-family: 'Courier New', monospace;
+    font-size: 16px;
+    color: var(--ink);
+    background: var(--bg-soft);
+    padding: 6px 12px;
+    display: inline-block;
+    border-radius: 4px;
+    margin-bottom: 10px;
+  }
+  .hand-card .description { margin-bottom: 10px; }
+  .hand-card .notes {
+    font-style: italic;
+    color: var(--ink-soft);
+    margin-bottom: 12px;
+  }
+  .hand-card .value {
+    display: inline-block;
+    padding: 4px 10px;
+    background: var(--gold);
+    color: #fff;
+    font-family: 'Cinzel', serif;
+    font-size: 12px;
+    letter-spacing: 0.06em;
+    border-radius: 12px;
+  }
+
+  /* ============================================
+     QUIZ
+     ============================================ */
+  .quiz-card {
+    background: var(--bg-card);
+    border: 3px solid var(--ink);
+    border-radius: 6px;
+    padding: 26px;
+    box-shadow: 6px 6px 0 var(--ink);
+  }
+  .quiz-progress {
+    font-size: 13px;
+    color: var(--ink-soft);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .quiz-question {
+    font-size: 19px;
+    font-weight: 600;
+    margin-bottom: 18px;
+  }
+  .quiz-choices { display: flex; flex-direction: column; gap: 8px; margin-bottom: 16px; }
+  .quiz-choice {
+    background: var(--bg-soft);
+    border: 2px solid var(--ink);
+    padding: 12px 16px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Source Sans 3', sans-serif;
+    font-size: 15px;
+    color: var(--ink);
+    border-radius: 4px;
+    transition: background 0.15s, border-color 0.15s;
+  }
+  .quiz-choice:hover:not(.locked) {
+    background: var(--accent);
+    color: #fff;
+    border-color: var(--accent);
+  }
+  .quiz-choice.locked { cursor: default; }
+  .quiz-choice.correct { background: var(--jade); color: #fff; border-color: var(--jade); }
+  .quiz-choice.incorrect { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .quiz-choice.faded { opacity: 0.5; }
+  .quiz-explain {
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--bg-soft);
+    border-left: 4px solid var(--jade);
+    border-radius: 4px;
+    display: none;
+    font-size: 15px;
+  }
+  .quiz-explain.shown { display: block; }
+  .quiz-next {
+    margin-top: 16px;
+    padding: 12px 28px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 16px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+    display: none;
+  }
+  .quiz-next.shown { display: inline-block; }
+  .quiz-next:hover { background: var(--accent); }
+  .quiz-summary {
+    text-align: center;
+    padding: 30px;
+  }
+  .quiz-summary .score {
+    font-family: 'Cinzel', serif;
+    font-size: 60px;
+    color: var(--accent);
+    line-height: 1;
+  }
+  .quiz-summary .out-of {
+    font-family: 'Cormorant Garamond', serif;
+    font-style: italic;
+    font-size: 20px;
+    color: var(--ink-soft);
+    margin-bottom: 16px;
+  }
+
+  /* ============================================
+     CHEAT SHEET
+     ============================================ */
+  .cheatsheet {
+    background: var(--bg-card);
+    border: 2px solid var(--ink);
+    padding: 30px;
+    border-radius: 6px;
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+  .cheatsheet h2 {
+    border-bottom: 2px solid var(--accent);
+    padding-bottom: 6px;
+    margin-bottom: 12px;
+  }
+  .cheatsheet h3 { color: var(--accent); }
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+    margin-top: 20px;
+  }
+  .cheat-grid > div {
+    background: var(--bg-soft);
+    padding: 16px;
+    border-radius: 4px;
+    border: 1px solid var(--line-soft);
+  }
+  .cheat-grid h4 {
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.06em;
+    color: var(--ink);
+    margin-bottom: 8px;
+  }
+  .print-btn {
+    display: inline-block;
+    margin-bottom: 18px;
+    padding: 10px 22px;
+    background: var(--ink);
+    color: var(--bg);
+    border: none;
+    font-family: 'Cinzel', serif;
+    font-size: 14px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  .print-btn:hover { background: var(--accent); }
+
+  /* Hide sidebar in print, optimize layout */
+  @media print {
+    .sidebar { display: none; }
+    .main { max-width: 100%; padding: 0; }
+    .view:not(#view-cheatsheet) { display: none !important; }
+    #view-cheatsheet { display: block !important; }
+    .print-btn { display: none; }
+    .cheatsheet { box-shadow: none; border: 1px solid #000; }
+    body { background: #fff; }
+  }
+
+  /* ============================================
+     MOBILE
+     ============================================ */
+  @media (max-width: 800px) {
+    .app { flex-direction: column; }
+    .sidebar {
+      width: 100%;
+      height: auto;
+      position: relative;
+      padding: 18px 22px;
+    }
+    .main { padding: 24px 20px 50px; }
+    .view h1 { font-size: 28px; }
+    .cheat-grid { grid-template-columns: 1fr; }
+    .tile { width: 44px; height: 58px; font-size: 18px; }
+    .tile.large { width: 60px; height: 80px; font-size: 24px; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- SIDEBAR NAV -->
+  <aside class="sidebar">
+    <h1>Mah Jongg</h1>
+    <div class="subtitle">A Family Learning Guide</div>
+
+    <h2>Lessons</h2>
+    <ul class="nav-list" id="nav-lessons"></ul>
+
+    <h2>Practice</h2>
+    <ul class="nav-list">
+      <li><button data-view="trainer"><span class="icon">🎴</span>Tile Trainer</button></li>
+      <li><button data-view="hands"><span class="icon">🧩</span>Hand Examples</button></li>
+      <li><button data-view="quiz"><span class="icon">❓</span>Quick Quiz</button></li>
+    </ul>
+
+    <h2>Reference</h2>
+    <ul class="nav-list">
+      <li><button data-view="cheatsheet"><span class="icon">📋</span>Cheat Sheet</button></li>
+    </ul>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- LESSON VIEWS -->
+    <div id="lesson-views"></div>
+
+    <!-- TILE TRAINER -->
+    <section class="view" id="view-trainer">
+      <header>
+        <h1>Tile Trainer</h1>
+        <p class="lead">Flashcard drills to learn every tile in the set.</p>
+      </header>
+      <p>Choose which group of tiles to drill. Click <em>Show Answer</em>, then mark whether you got it right. Your accuracy is tracked for this session.</p>
+
+      <div class="trainer-controls">
+        <select id="trainer-group">
+          <option value="all">All 34 tile types</option>
+          <option value="craks">Craks (1-9)</option>
+          <option value="bams">Bams (1-9)</option>
+          <option value="dots">Dots (1-9)</option>
+          <option value="winds">Winds (N, E, S, W)</option>
+          <option value="dragons">Dragons (R, G, W)</option>
+          <option value="honors">Honors (Winds + Dragons)</option>
+          <option value="special">Special (Flowers + Jokers)</option>
+        </select>
+        <button id="trainer-restart">Restart Session</button>
+      </div>
+
+      <div class="trainer">
+        <div class="flashcard">
+          <div class="progress" id="trainer-progress">Card 1 of 34</div>
+          <div id="trainer-tile-display"></div>
+          <div class="reveal" id="trainer-reveal">
+            <h3 id="trainer-name"></h3>
+            <p class="notes" id="trainer-notes"></p>
+          </div>
+          <div class="stats" id="trainer-stats"></div>
+        </div>
+        <div class="trainer-actions" id="trainer-actions">
+          <button class="primary" id="trainer-show">Show Answer</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- HAND EXAMPLES -->
+    <section class="view" id="view-hands">
+      <header>
+        <h1>Hand Examples</h1>
+        <p class="lead">Sample hand structures that show how card patterns work. <strong>Not actual 2026 NMJL hands.</strong></p>
+      </header>
+      <p>The real 2026 NMJL card has roughly 65-75 hands. We can't reproduce them here (the card is copyrighted by NMJL — you can order it from <a href="https://www.nationalmahjonggleague.org/" target="_blank" rel="noopener">nationalmahjonggleague.org</a>). These examples teach you how to <em>read</em> a hand pattern so you'll be comfortable with the real card when it arrives.</p>
+      <div id="hand-examples-list"></div>
+    </section>
+
+    <!-- QUICK QUIZ -->
+    <section class="view" id="view-quiz">
+      <header>
+        <h1>Quick Quiz</h1>
+        <p class="lead">12 questions to check your understanding of the rules.</p>
+      </header>
+      <div id="quiz-area"></div>
+    </section>
+
+    <!-- CHEAT SHEET -->
+    <section class="view" id="view-cheatsheet">
+      <header>
+        <h1>Table Cheat Sheet</h1>
+        <p class="lead">Print one copy per player and keep it at the rack for your first few games.</p>
+      </header>
+      <button class="print-btn" onclick="window.print()">🖨 Print this page</button>
+
+      <div class="cheatsheet">
+        <h2>The Set: 152 Tiles</h2>
+        <p><strong>108 suits</strong> (Craks 1-9 × 4, Bams 1-9 × 4, Dots 1-9 × 4) · <strong>16 Winds</strong> (N, E, S, W × 4) · <strong>12 Dragons</strong> (Red, Green, White × 4) · <strong>8 Flowers</strong> · <strong>8 Jokers</strong></p>
+
+        <h2>Charleston (ROLLOR)</h2>
+        <p><strong>First Charleston</strong> (mandatory): <strong>R</strong>ight → <strong>O</strong>ver → <strong>L</strong>eft<br>
+        <strong>Second Charleston</strong> (optional, can be stopped after first Left): <strong>L</strong>eft → <strong>O</strong>ver → <strong>R</strong>ight<br>
+        <strong>Courtesy Pass</strong> (optional): 1-3 tiles across, if both agree.<br>
+        <strong>Blind passes allowed</strong> only on the third pass of each Charleston (1st Left, 2nd Right).</p>
+
+        <div class="cheat-grid">
+          <div>
+            <h4>You CAN do these with Jokers</h4>
+            <ul>
+              <li>Use in a <strong>pung</strong> (3 of a kind)</li>
+              <li>Use in a <strong>kong</strong> (4 of a kind)</li>
+              <li>Use in a <strong>quint</strong> (5 of a kind)</li>
+              <li>Use in a <strong>sextet</strong> (6 of a kind)</li>
+              <li><strong>Joker Exchange:</strong> swap your natural tile for an opponent's joker in their exposed set</li>
+            </ul>
+          </div>
+          <div>
+            <h4>You CANNOT do these with Jokers</h4>
+            <ul>
+              <li><strong>Never in a pair</strong></li>
+              <li><strong>Never in a single</strong></li>
+              <li><strong>Never in NEWS</strong> sequences</li>
+              <li><strong>Never pass a joker in the Charleston</strong></li>
+              <li><strong>Never claim a discarded joker</strong> (it's dead)</li>
+            </ul>
+          </div>
+        </div>
+
+        <h2>A Turn</h2>
+        <ol>
+          <li><strong>Draw</strong> from the wall (skip on East's first turn)</li>
+          <li><strong>Decide:</strong> Mah Jongg? Or which tile to discard?</li>
+          <li><strong>Discard</strong> — place it face-up and <strong>name it out loud</strong></li>
+        </ol>
+
+        <h2>Claiming a Discard</h2>
+        <ul>
+          <li>Call <strong>"Take it!"</strong> before the next player draws</li>
+          <li>You must already have 2+ matching tiles (for pung/kong/quint) — OR it must complete Mah Jongg</li>
+          <li>You <strong>expose</strong> the set face-up on your rack and discard to continue</li>
+          <li><strong>Pairs cannot be claimed</strong> except as the final Mah Jongg tile</li>
+        </ul>
+
+        <h2>The Most-Forgotten Rules</h2>
+        <ul>
+          <li>1 Bam looks like a bird, not a bamboo</li>
+          <li>White Dragon = "Soap" = also the "0" in 2026 hands</li>
+          <li>Pairs cannot use jokers</li>
+          <li>NEWS sequences cannot use jokers</li>
+          <li>Same color on card = same suit; different colors = different suits</li>
+          <li>Play goes counter-clockwise</li>
+          <li>Hand has 14 tiles total — count them when verifying a Mah Jongg call</li>
+        </ul>
+
+        <h2>Standard Payouts</h2>
+        <table class="ref-table">
+          <thead><tr><th>How you won</th><th>Each player pays</th></tr></thead>
+          <tbody>
+            <tr><td>Claimed discard, exposed hand</td><td>Hand value × 1</td></tr>
+            <tr><td>Self-pick, exposed hand</td><td>Hand value × 2</td></tr>
+            <tr><td>Claimed discard, concealed hand</td><td>Hand value × 2</td></tr>
+            <tr><td>Self-pick, concealed hand</td><td>Hand value × 4</td></tr>
+          </tbody>
+        </table>
+        <p><em>Discarder (when applicable) pays double.</em></p>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<!-- Data + app logic -->
+<script src="data.js"></script>
+<script>
+  // ============================================
+  // TILE RENDERER
+  // ============================================
+  function renderTile(tile, sizeClass) {
+    sizeClass = sizeClass || '';
+    let classes = 'tile ' + sizeClass;
+    let display = '';
+    let marker = '';
+
+    if (tile.suit === 'crak') {
+      classes += ' crak';
+      display = '<span class="num">' + tile.number + '</span>';
+      marker = 'CRAK';
+    } else if (tile.suit === 'bam') {
+      classes += ' bam';
+      if (tile.number === 1) {
+        display = '<span class="num">🐦</span>';
+      } else {
+        display = '<span class="num">' + tile.number + '</span>';
+      }
+      marker = 'BAM';
+    } else if (tile.suit === 'dot') {
+      classes += ' dot';
+      display = '<span class="num">' + tile.number + '</span>';
+      marker = 'DOT';
+    } else if (tile.suit === 'wind') {
+      classes += ' wind';
+      display = '<span class="num">' + tile.short + '</span>';
+      marker = 'WIND';
+    } else if (tile.suit === 'dragon') {
+      if (tile.id === 'dr') { classes += ' dragon-r'; display = '<span class="num">R</span>'; marker = 'RED'; }
+      else if (tile.id === 'dg') { classes += ' dragon-g'; display = '<span class="num">G</span>'; marker = 'GREEN'; }
+      else { classes += ' dragon-w'; display = '<span class="num">○</span>'; marker = 'SOAP'; }
+    } else if (tile.suit === 'flower') {
+      classes += ' flower';
+      display = '<span class="num">F</span>';
+      marker = 'FLWR';
+    } else if (tile.suit === 'joker') {
+      classes += ' joker';
+      display = '<span class="num">JOKER</span>';
+      marker = '';
+    }
+
+    return '<div class="' + classes + '">' + display + (marker ? '<span class="marker">' + marker + '</span>' : '') + '</div>';
+  }
+
+  // ============================================
+  // VIEW ROUTING
+  // ============================================
+  function showView(viewId) {
+    document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+    document.querySelectorAll('.nav-list button').forEach(b => b.classList.remove('active'));
+    const target = document.getElementById('view-' + viewId);
+    if (target) target.classList.add('active');
+    const navBtn = document.querySelector('.nav-list button[data-view="' + viewId + '"]');
+    if (navBtn) navBtn.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // ============================================
+  // LESSONS — render
+  // ============================================
+  function renderLessons() {
+    const navList = document.getElementById('nav-lessons');
+    const viewContainer = document.getElementById('lesson-views');
+    LESSONS.forEach((lesson, i) => {
+      // Nav item
+      const li = document.createElement('li');
+      li.innerHTML = '<button data-view="' + lesson.id + '"><span class="icon">' + lesson.icon + '</span>' + (i+1) + '. ' + lesson.title + '</button>';
+      navList.appendChild(li);
+
+      // View section
+      const section = document.createElement('section');
+      section.className = 'view';
+      section.id = 'view-' + lesson.id;
+      section.innerHTML = '<header><h1>' + lesson.icon + ' ' + lesson.title + '</h1><p class="lead">Lesson ' + (i+1) + ' of ' + LESSONS.length + '</p></header>' + lesson.content;
+
+      // Add a Next button at the end
+      const nextBtn = document.createElement('div');
+      nextBtn.style.marginTop = '32px';
+      nextBtn.style.paddingTop = '20px';
+      nextBtn.style.borderTop = '1px solid var(--line-soft)';
+      if (i < LESSONS.length - 1) {
+        const next = LESSONS[i+1];
+        nextBtn.innerHTML = '<button onclick="showView(\'' + next.id + '\')" style="padding:12px 24px; background:var(--ink); color:var(--bg); border:none; font-family:\'Cinzel\',serif; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; cursor:pointer;">Next: ' + next.title + ' →</button>';
+      } else {
+        nextBtn.innerHTML = '<button onclick="showView(\'trainer\')" style="padding:12px 24px; background:var(--accent); color:#fff; border:none; font-family:\'Cinzel\',serif; font-size:14px; letter-spacing:0.08em; text-transform:uppercase; border-radius:4px; cursor:pointer;">🎴 Start the Tile Trainer →</button>';
+      }
+      section.appendChild(nextBtn);
+      viewContainer.appendChild(section);
+    });
+  }
+
+  // ============================================
+  // TRAINER
+  // ============================================
+  let trainerState = {
+    group: 'all',
+    deck: [],
+    idx: 0,
+    revealed: false,
+    correct: 0,
+    wrong: 0,
+    seen: 0
+  };
+
+  function shuffle(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  function startTrainer(group) {
+    trainerState.group = group;
+    trainerState.deck = shuffle(DRILL_GROUPS[group].tiles);
+    trainerState.idx = 0;
+    trainerState.revealed = false;
+    trainerState.correct = 0;
+    trainerState.wrong = 0;
+    trainerState.seen = 0;
+    renderTrainer();
+  }
+
+  function renderTrainer() {
+    const tile = trainerState.deck[trainerState.idx];
+    document.getElementById('trainer-tile-display').innerHTML = renderTile(tile, 'large');
+    document.getElementById('trainer-progress').textContent = 'Card ' + (trainerState.idx + 1) + ' of ' + trainerState.deck.length;
+    document.getElementById('trainer-name').textContent = tile.name;
+    document.getElementById('trainer-notes').textContent = tile.notes;
+
+    const reveal = document.getElementById('trainer-reveal');
+    const actions = document.getElementById('trainer-actions');
+    const stats = document.getElementById('trainer-stats');
+
+    if (trainerState.revealed) {
+      reveal.classList.add('shown');
+      actions.innerHTML =
+        '<button class="correct" onclick="markAnswer(true)">✓ Got it right</button>' +
+        '<button onclick="markAnswer(false)">✗ Missed it</button>';
+    } else {
+      reveal.classList.remove('shown');
+      actions.innerHTML = '<button class="primary" onclick="showTrainerAnswer()">Show Answer</button>';
+    }
+
+    if (trainerState.seen > 0) {
+      const acc = ((trainerState.correct / trainerState.seen) * 100).toFixed(0);
+      stats.innerHTML = '<strong>' + trainerState.correct + '</strong> correct · <span class="wrong">' + trainerState.wrong + '</span> missed · ' + acc + '% accuracy';
+    } else {
+      stats.innerHTML = '';
+    }
+  }
+
+  function showTrainerAnswer() {
+    trainerState.revealed = true;
+    renderTrainer();
+  }
+
+  function markAnswer(correct) {
+    if (correct) trainerState.correct++;
+    else trainerState.wrong++;
+    trainerState.seen++;
+    trainerState.idx++;
+    trainerState.revealed = false;
+    if (trainerState.idx >= trainerState.deck.length) {
+      // Finished — restart deck (shuffled)
+      trainerState.deck = shuffle(DRILL_GROUPS[trainerState.group].tiles);
+      trainerState.idx = 0;
+    }
+    renderTrainer();
+  }
+
+  // ============================================
+  // HAND EXAMPLES
+  // ============================================
+  function renderHandTile(label) {
+    // Map label to a tile rendering
+    if (label === 'F') return renderTile({suit:'flower'}, 'small');
+    if (label === 'N') return renderTile({suit:'wind', short:'N'}, 'small');
+    if (label === 'E') return renderTile({suit:'wind', short:'E'}, 'small');
+    if (label === 'S') return renderTile({suit:'wind', short:'S'}, 'small');
+    if (label === 'W') return renderTile({suit:'wind', short:'W'}, 'small');
+    if (label === 'D') return renderTile({id:'dr', suit:'dragon'}, 'small');
+    if (label === '0') return renderTile({id:'dw', suit:'dragon'}, 'small');
+    // Numbered — show as a generic numbered tile in red (we don't know suit context here)
+    if (/^\d$/.test(label)) {
+      return '<div class="tile small crak"><span class="num">' + label + '</span><span class="marker">?</span></div>';
+    }
+    return '<div class="tile small">' + label + '</div>';
+  }
+
+  function renderHands() {
+    const container = document.getElementById('hand-examples-list');
+    HAND_EXAMPLES.forEach(hand => {
+      const div = document.createElement('div');
+      div.className = 'hand-card';
+      const tilesHtml = hand.tiles.map(renderHandTile).join('');
+      div.innerHTML = '<h3>' + hand.section + '</h3>' +
+        '<div class="pattern">' + hand.pattern + '</div>' +
+        '<p class="description">' + hand.description + '</p>' +
+        '<div class="tile-row" style="background:var(--bg-soft); justify-content:flex-start;">' + tilesHtml + '</div>' +
+        '<p class="notes">' + hand.notes + '</p>' +
+        '<span class="value">' + hand.value + '</span>';
+      container.appendChild(div);
+    });
+  }
+
+  // ============================================
+  // QUIZ
+  // ============================================
+  let quizState = {
+    deck: [],
+    idx: 0,
+    score: 0,
+    answered: false
+  };
+
+  function startQuiz() {
+    quizState.deck = shuffle(QUIZ);
+    quizState.idx = 0;
+    quizState.score = 0;
+    quizState.answered = false;
+    renderQuiz();
+  }
+
+  function renderQuiz() {
+    const area = document.getElementById('quiz-area');
+    if (quizState.idx >= quizState.deck.length) {
+      // Summary
+      const total = quizState.deck.length;
+      const pct = (quizState.score / total * 100).toFixed(0);
+      let blurb = '';
+      if (pct >= 90) blurb = 'Excellent! You\'re ready to deal.';
+      else if (pct >= 75) blurb = 'Solid foundation. Run the lessons again for the items you missed, then drill the trainer.';
+      else if (pct >= 50) blurb = 'You\'ve got the basics. Re-read the lessons on jokers and the Charleston — those are the deep cuts.';
+      else blurb = 'Step back through the lessons in order. The good news: this stuff sinks in fast once you sit down at the table.';
+      area.innerHTML = '<div class="quiz-card quiz-summary">' +
+        '<div class="score">' + quizState.score + '</div>' +
+        '<div class="out-of">out of ' + total + ' (' + pct + '%)</div>' +
+        '<p style="margin-top:16px;">' + blurb + '</p>' +
+        '<button class="quiz-next shown" onclick="startQuiz()">Try Again</button>' +
+        '</div>';
+      return;
+    }
+
+    const q = quizState.deck[quizState.idx];
+    // Shuffle choices so position bias doesn't leak in
+    const order = shuffle([0,1,2,3]);
+    const displayChoices = order.map(i => q.choices[i]);
+    const correctIdx = order.indexOf(q.answer);
+    quizState.currentCorrectIdx = correctIdx;
+    quizState.currentDisplay = displayChoices;
+
+    area.innerHTML =
+      '<div class="quiz-card">' +
+        '<div class="quiz-progress">Question ' + (quizState.idx + 1) + ' of ' + quizState.deck.length + ' · Score: ' + quizState.score + '</div>' +
+        '<div class="quiz-question">' + q.q + '</div>' +
+        '<div class="quiz-choices" id="quiz-choices"></div>' +
+        '<div class="quiz-explain" id="quiz-explain">' + q.explain + '</div>' +
+        '<button class="quiz-next" id="quiz-next" onclick="nextQuiz()">Next →</button>' +
+      '</div>';
+
+    const choicesEl = document.getElementById('quiz-choices');
+    displayChoices.forEach((choice, i) => {
+      const btn = document.createElement('button');
+      btn.className = 'quiz-choice';
+      btn.textContent = String.fromCharCode(65 + i) + '.  ' + choice;
+      btn.onclick = () => answerQuiz(i, btn);
+      choicesEl.appendChild(btn);
+    });
+    quizState.answered = false;
+  }
+
+  function answerQuiz(selectedIdx, btn) {
+    if (quizState.answered) return;
+    quizState.answered = true;
+    const allChoices = document.querySelectorAll('.quiz-choice');
+    const correctIdx = quizState.currentCorrectIdx;
+    allChoices.forEach((c, i) => {
+      c.classList.add('locked');
+      if (i === correctIdx) c.classList.add('correct');
+      else if (i === selectedIdx) c.classList.add('incorrect');
+      else c.classList.add('faded');
+    });
+    if (selectedIdx === correctIdx) quizState.score++;
+    document.getElementById('quiz-explain').classList.add('shown');
+    document.getElementById('quiz-next').classList.add('shown');
+  }
+
+  function nextQuiz() {
+    quizState.idx++;
+    renderQuiz();
+  }
+
+  // ============================================
+  // INIT
+  // ============================================
+  function init() {
+    renderLessons();
+    renderHands();
+
+    // Wire navigation
+    document.querySelectorAll('.nav-list button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const view = btn.dataset.view;
+        showView(view);
+        if (view === 'trainer') startTrainer(trainerState.group);
+        if (view === 'quiz') startQuiz();
+      });
+    });
+
+    // Trainer group selector
+    document.getElementById('trainer-group').addEventListener('change', e => {
+      startTrainer(e.target.value);
+    });
+    document.getElementById('trainer-restart').addEventListener('click', () => {
+      startTrainer(trainerState.group);
+    });
+
+    // Initial view
+    showView('welcome');
+  }
+
+  init();
+</script>
+</body>
+</html>
