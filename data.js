@@ -59,8 +59,8 @@ const TILES = [
   // FLOWERS — 8 in the set (American sets typically have 8 generic Flowers marked "F")
   { id: 'f', group: 'flower', suit: 'flower', name: 'Flower', short: 'F', count: 8, notes: 'In American Mah Jongg, all 8 flowers are interchangeable — they all count as "Flower" (F). The decorative art on each one is purely cosmetic.' },
 
-  // JOKERS — 8 in the set
-  { id: 'j', group: 'joker', suit: 'joker', name: 'Joker', short: 'JOKER', count: 8, notes: 'Wild tile. Can substitute in any pung, kong, quint, or sextet — but NEVER in pairs, singles, or NEWS. Cannot be passed during the Charleston.' }
+  // JOKERS — 8 in active play (NMJL standard); our set has 10 total but we play with 8
+  { id: 'j', group: 'joker', suit: 'joker', name: 'Joker', short: 'JOKER', count: 8, notes: 'Wild tile. Can substitute in any pung, kong, quint, or sextet — but NEVER in pairs, singles, or NEWS. Cannot be passed during the Charleston. Our Oh My Mahjong set comes with 10 jokers — we keep 2 in the box as spares and play with 8 (the NMJL standard).' }
 ];
 
 // Verify the set totals to 152 tiles
@@ -114,7 +114,7 @@ const LESSONS = [
       <h3>How to use this site</h3>
       <p>The lessons are progressive — start at the top of the menu and work down. Each lesson is short. Between lessons, drop into the <strong>Tile Trainer</strong> or <strong>Hand Practice</strong> sections to drill what you've learned. The <strong>Cheat Sheet</strong> is a printable one-pager for the table once you're playing.</p>
 
-      <p style="margin-top:24px; padding:16px; background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 4px;"><strong>First task before next lesson:</strong> Count your set. You're looking for <strong>152 playable tiles</strong>. American sets typically ship with 14 extras (totalling 166), so don't panic if you have more. The key is: do you have <strong>8 Jokers</strong> and <strong>8 Flowers (marked F)</strong>? If yes — you've got an American set. Welcome aboard.</p>
+      <p style="margin-top:24px; padding:16px; background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 4px;"><strong>About our family set:</strong> We have an <strong>Oh My Mahjong "Poppy Tiles"</strong> set — a beautifully illustrated modern American set. It includes <strong>10 jokers</strong> (two sets of 5) and <strong>6 Blank tiles</strong>. <strong>We play with the NMJL standard 8 jokers</strong> — the league's hand values and difficulty ratings are calibrated to 8, so this matches how the game is meant to be played. Keep 2 jokers and the 6 Blanks in the box as spares (in case a tile gets damaged or lost). Our playable set: 152 tiles, just like the NMJL reference.</p>
     `
   },
   {
@@ -138,6 +138,8 @@ const LESSONS = [
           <tr class="total-row"><td colspan="3"><strong>Grand total</strong></td><td><strong>152</strong></td></tr>
         </tbody>
       </table>
+
+      <p><em>Our Oh My Mahjong set comes with 10 jokers — we keep 2 as spares (along with the 6 Blanks) and play with the NMJL standard 8.</em></p>
 
       <h3>The three suits</h3>
       <p>Three suits, each numbered 1 through 9, 4 copies of each — 108 suit tiles in total.</p>
@@ -195,7 +197,7 @@ const LESSONS = [
 
       <h3>How a turn works (the short version)</h3>
       <ol>
-        <li>Players take turns going counter-clockwise. East starts.</li>
+        <li>Players take turns going to the right (each player passes to the player on their right). East starts.</li>
         <li>On your turn you <strong>draw a tile</strong> from the wall and then <strong>discard a tile</strong> from your hand. You always end your turn with 13 tiles.</li>
         <li>When you discard, you must <strong>name the tile out loud</strong> (e.g. "Three Bam"). This lets others claim it.</li>
         <li>If someone needs the discarded tile to complete a set of three or more matching tiles, they can <strong>call it</strong> — they take the tile, expose the set on their rack, and then discard to continue play.</li>
@@ -203,6 +205,86 @@ const LESSONS = [
       </ol>
 
       <p>That's the skeleton. Next lessons will cover the Charleston (the tile-passing ritual that happens before any of this starts), then jokers, then scoring.</p>
+    `
+  },
+  {
+    id: 'card',
+    title: 'Reading the 2026 Card',
+    icon: '🗂️',
+    content: `
+      <p>Now that the 2026 NMJL card is in hand, here's how to actually read it. This is the layer where everything from the earlier lessons comes together.</p>
+
+      <h3>The card's own shorthand</h3>
+      <p>The back of the card gives you the full notation key. Memorize this:</p>
+      <table class="ref-table">
+        <thead><tr><th>Symbol</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><code>F</code></td><td>Flower</td></tr>
+          <tr><td><code>D</code></td><td>Dragon (color matches its print color — see Matching Dragons below)</td></tr>
+          <tr><td><code>0</code></td><td>Soap (White Dragon) — also the literal "0" in 2026 hands</td></tr>
+          <tr><td><code>N E W S</code></td><td>North, East, West, South winds</td></tr>
+          <tr><td><code>Pair / Pung / Kong / Quint / Sextet</code></td><td>2 / 3 / 4 / 5 / 6 like tiles</td></tr>
+          <tr><td><code>Run</code></td><td>Any consecutive numbers</td></tr>
+          <tr><td><code>1 color</code></td><td>1 suit</td></tr>
+          <tr><td><code>2 colors</code></td><td>2 suits</td></tr>
+          <tr><td><code>3 colors</code></td><td>3 suits</td></tr>
+          <tr><td><code>X</code></td><td>Exposed allowed</td></tr>
+          <tr><td><code>C</code></td><td>Concealed only (must self-draw, no claiming)</td></tr>
+        </tbody>
+      </table>
+
+      <h3>Matching Dragons</h3>
+      <p>The card establishes these permanent pairings:</p>
+      <ul>
+        <li><strong>Red Dragon ↔ Craks</strong></li>
+        <li><strong>Green Dragon ↔ Bams</strong></li>
+        <li><strong>White Dragon (Soap) ↔ Dots</strong></li>
+      </ul>
+      <p>So when a hand says "FFF 33 666 99 DDDD (1 Suit w Matching Dragon)" — if you choose Bams as your suit, your D's must be Green Dragons. The pairing is fixed.</p>
+
+      <h3>The color rule (most important visual cue)</h3>
+      <p>Tiles printed in the <strong>same color</strong> on the card must be the <strong>same suit</strong> in your hand. Tiles in <strong>different colors</strong> must be in <strong>different suits</strong>. Three ink colors are used on the card: <strong>black</strong>, <strong>red</strong>, and <strong>green</strong>. They have no inherent suit assignment — they just say "this group goes with that group" or "this group does NOT go with that group."</p>
+
+      <p>Example: <code>222 000 2222 6666 (Any 2 Suits)</code> from the 2026 section. The "222" is one color, "0000" is another, "2222" is another, "6666" is another. The "(Any 2 Suits)" hint at the end confirms you'll be working with two suits total — so two of the color groups must share a suit. Look at which groups share a color to figure out which two.</p>
+
+      <h3>Reading "Any N Suits" vs "1 Suit" vs "These Nos. Only"</h3>
+      <ul>
+        <li><strong>"Any 1 Suit"</strong> — the whole hand is in one suit. You pick which.</li>
+        <li><strong>"Any 2 Suits"</strong> — two suits used. You pick which two.</li>
+        <li><strong>"Any 3 Suits"</strong> — all three suits used.</li>
+        <li><strong>"Any 1 or 2 Suits"</strong> — flexible. Play it in one suit or two suits, your choice.</li>
+        <li><strong>"These Nos. Only"</strong> — the exact numbers shown, not any equivalents. So "2 4 6 8 - These Nos. Only" means you must use 2, 4, 6, and 8 specifically.</li>
+        <li><strong>"Any Like Nos."</strong> — pick any number and use it throughout.</li>
+        <li><strong>"Any Consec. Nos."</strong> — any run of consecutive numbers (e.g. 1-2-3, 5-6-7, 7-8-9).</li>
+      </ul>
+
+      <h3>X vs C — the easiest detail to miss</h3>
+      <p>The value column on the right shows things like <strong>X 25</strong>, <strong>X 30</strong>, <strong>C 30</strong>, <strong>C 50</strong>, <strong>C 75</strong>.</p>
+      <ul>
+        <li><strong>X</strong> = exposed allowed. You can claim discards and expose sets on your rack as you go. Easier.</li>
+        <li><strong>C</strong> = concealed only. You must build the entire hand from your own draws (Charleston, then wall picks). You <em>cannot</em> claim any discards — except the very last tile for Mah Jongg. Harder, and worth more points.</li>
+      </ul>
+      <p>The <strong>Singles &amp; Pairs</strong> section is entirely C hands — that whole section is for advanced players who want to commit to a closed hand early. The biggest hand on the card, <strong>C 75 (FF 2026 2026 2026 — Any 3 Suits)</strong>, lives there.</p>
+
+      <h3>Three beginner-friendly hands to start with</h3>
+      <p>For your first family games, highlight or circle these on the card:</p>
+
+      <h4 style="color: var(--accent); margin-top: 14px;">1. 2468 → <code>222 444 6666 8888 (Any 1 or 2 Suits) — X 25</code></h4>
+      <p>The "Any 1 or 2 Suits" makes this enormously flexible. Pung-pung-kong-kong structure means you can use jokers freely. Easy Charleston targets — 2s, 4s, 6s, 8s.</p>
+
+      <h4 style="color: var(--accent); margin-top: 14px;">2. Any Like Numbers → <code>1111 FFFFFF 1111 (Any 2 Suits) — X 30</code></h4>
+      <p>"Any Like Numbers" means you pick the number — work with whatever you're dealt. Six flowers anchors the hand. If you start with 3-4 flowers, this is your destination.</p>
+
+      <h4 style="color: var(--accent); margin-top: 14px;">3. 2026 → <code>2026 DDD 2222 DDD (Any 2 Suits w Matching Dragons, Kong 2 or 6) — X 25</code></h4>
+      <p>The signature year hand. The Matching Dragons rule applies (Red+Craks, Green+Bams, Soap+Dots). If you're dealt some 2s, some 6s, and the right dragon, you're already heading toward this.</p>
+
+      <h3>Charleston targeting based on the card</h3>
+      <p>For your first games, target the easy hands above. That means:</p>
+      <ul>
+        <li><strong>Keep:</strong> 2s, 4s, 6s, 8s, Flowers, Soap (White Dragon), Dragons that match suits you're collecting, all jokers, all pairs</li>
+        <li><strong>Pass freely:</strong> 1s, 3s, 5s, 7s, 9s (unless you're chasing 13579), lone winds, dragons that don't match your suit, singletons in suits you don't have</li>
+      </ul>
+      <p>Once you're more comfortable, you'll start pivoting between hands during the Charleston as your tiles develop. For now, pick one of the three easy hands above and commit.</p>
     `
   },
   {
@@ -320,10 +402,19 @@ const LESSONS = [
       <ul>
         <li><strong>Cannot be used in a pair.</strong> A pair must be two natural matching tiles.</li>
         <li><strong>Cannot be used in a single.</strong> If the hand calls for a single 5 Dot, it must be the actual 5 Dot.</li>
-        <li><strong>Cannot be used in NEWS sequences.</strong> A NEWS hand requires the actual N, E, W, S tiles.</li>
+        <li><strong>Cannot be used in NEWS or 2026 single-tile sequences.</strong> Any individual tile position on the card (like the N in NEWS, or the 0 in 2026) requires the actual natural tile.</li>
         <li><strong>Cannot be passed in the Charleston.</strong> Ever.</li>
         <li><strong>Cannot be claimed from the discard pile.</strong> If a joker is discarded, it's dead — it stays in the discard pile.</li>
       </ul>
+
+      <h3>Jokers CAN be discarded (but usually shouldn't)</h3>
+      <p>The official rule states: <strong>"Jokers may be discarded and named 'Joker,' 'same,' or name of previous discard."</strong> Three things to know about this:</p>
+      <ul>
+        <li>It's legal — you can choose to throw a joker away</li>
+        <li>Once discarded, it's <strong>dead</strong> — nobody can pick it up</li>
+        <li>It's almost always a bad move unless you're stuck with one you absolutely can't use and you're trying to be defensive late in the hand</li>
+      </ul>
+      <p>You'll mostly discard jokers as a sacrifice play — to avoid giving an opponent the natural tile they need.</p>
 
       <h3>The Joker Exchange (a huge deal)</h3>
       <p>If another player has an exposed set on their rack that contains a joker, and you have the actual natural tile that the joker is substituting for, <strong>you can redeem the joker</strong>. On your turn (after drawing), you offer the natural tile and take their joker. They keep the set complete; you walk away with a joker.</p>
@@ -347,7 +438,7 @@ const LESSONS = [
       <h3>Setup recap</h3>
       <ul>
         <li>The wall (the unused tiles) sits in the middle of the table — usually in stacks of two rows.</li>
-        <li>East is the dealer and goes first. Play then proceeds <strong>counter-clockwise</strong> (right to left around the table).</li>
+        <li>East is the dealer and goes first. Play then proceeds <strong>to the right</strong> (each player passes to the player on their right).</li>
         <li>Every player has 13 tiles on their rack at the start of their turn (after the Charleston). East has 14 — and starts the game by discarding one.</li>
       </ul>
 
@@ -360,7 +451,7 @@ const LESSONS = [
 
       <h3>Claiming a discard</h3>
       <p>When a tile is discarded, any other player can claim it if they have at least two matching tiles already (to form a pung, kong, etc.) — or if it's their final tile for Mah Jongg.</p>
-      <p>To claim, say <strong>"Take it!"</strong> (or "Call!") <em>before</em> the next player draws. Speed matters — once the next player has touched the wall, the discard is gone.</p>
+      <p>To claim, say <strong>"Call!"</strong> (or "Take!" or "I want that!") — the card explicitly accepts any clear verbalization. The window stays open until <strong>the next player has picked AND either racked the tile or discarded</strong>. So if the next player picks a tile and is still holding it deciding, you can still call. Once they rack it (place it behind their rack) or discard, the discard is gone.</p>
       <p>If you call:</p>
       <ol>
         <li>You take the discarded tile.</li>
@@ -403,32 +494,56 @@ const LESSONS = [
         <li><strong>Whether you used jokers</strong> — concealed hands with no jokers earn a further bonus in many house rules</li>
       </ul>
 
-      <h3>Standard payouts (most-common scoring)</h3>
+      <h3>Standard payouts (from the 2026 NMJL card)</h3>
+      <p>Each hand on the card has a base value (X 25, X 30, C 50, etc.). Multiply that base value as follows:</p>
       <table class="ref-table">
-        <thead><tr><th>How you won</th><th>Each player pays you</th></tr></thead>
+        <thead><tr><th>Situation</th><th>Multiplier</th></tr></thead>
         <tbody>
-          <tr><td>Won by claiming the discard (exposed hand)</td><td>Hand value × 1</td></tr>
-          <tr><td>Won by self-pick (exposed hand)</td><td>Hand value × 2</td></tr>
-          <tr><td>Won by claiming the discard (concealed hand)</td><td>Hand value × 2</td></tr>
-          <tr><td>Won by self-pick (concealed hand)</td><td>Hand value × 4</td></tr>
+          <tr><td>Won by claiming a discard, exposed hand</td><td>× 1</td></tr>
+          <tr><td>Won by self-pick, exposed hand</td><td>× 2</td></tr>
+          <tr><td>Won by claiming a discard, concealed hand</td><td>× 2</td></tr>
+          <tr><td>Won by self-pick, concealed hand</td><td>× 4</td></tr>
+          <tr><td><strong>Bonus: won without using any joker</strong></td><td>× 2 on top of the above (except Singles &amp; Pairs)</td></tr>
         </tbody>
       </table>
-      <p><strong>Important:</strong> the player whose discard you took (if applicable) pays double — they "fed the winner." So in an exposed claim-win at 25 points: two players pay 25 each, and the discarder pays 50. The winner collects 100 total.</p>
+      <p><strong>Discarder penalty:</strong> the player whose discard you took (if applicable) pays double — they "fed the winner." So in an exposed claim-win at base value 25: two non-discarder players pay 25 each, the discarder pays 50, total to winner = 100. With a jokerless bonus, double everything.</p>
+
+      <h3>The "no joker" doubler — official rule, often missed</h3>
+      <p>If you complete a winning hand <strong>without using a single joker</strong>, the value paid by every player doubles. This is rule 7 on the back of the card. The only exception is Singles &amp; Pairs hands, which never allow jokers anyway. So if you're playing an X 25 hand without jokers and someone discards your winning tile, every player pays 25 × 2 = 50, and the discarder pays 100. This is why jokerless wins are coveted.</p>
+
+      <h3>The "misnamed tile" penalty — official rule, easy to forget</h3>
+      <p>You must <strong>name your discard correctly</strong>. If you misname it:</p>
+      <ul>
+        <li>If another player calls it for an Exposure based on the wrong name, their hand becomes dead. You're not penalized.</li>
+        <li>If another player calls Mah Jongg based on the wrong name, <strong>you alone pay them 4 times the value of the hand</strong>. The other two players pay nothing.</li>
+      </ul>
+      <p>This is why naming tiles correctly matters — it's not just etiquette, it can cost you a small fortune in a single careless turn.</p>
 
       <h3>Losing hands</h3>
       <p>If no one wins (a wall game), no money changes hands. If someone wins, the three non-winners simply pay according to the table above. There's no penalty for being close — you either win or you don't.</p>
 
-      <h3>"Dead hands" — be careful</h3>
-      <p>A hand can be <strong>declared dead</strong> mid-round if you make an illegal move:</p>
+      <h3>Dead hands — be careful</h3>
+      <p>A hand is "dead" if it has any of these problems:</p>
       <ul>
-        <li>Exposing a set that doesn't match any possible hand on the card</li>
-        <li>Calling Mah Jongg incorrectly (your hand doesn't actually match the pattern you claimed)</li>
-        <li>Drawing without discarding, then drawing again</li>
-        <li>Having the wrong number of tiles on your rack</li>
+        <li>Too few or too many tiles on the rack</li>
+        <li>An exposure that doesn't match any possible hand on the card</li>
+        <li>A misnamed exposure (you called a tile by the wrong name and exposed with it)</li>
+        <li>An incorrect Mah Jongg call where the hand was exposed</li>
       </ul>
-      <p>A dead hand can't win the round, but you keep playing (you draw and discard to keep tiles moving for others). You also don't have to pay if someone else wins — your hand is "out."</p>
+      <p>A dead hand stops picking and discarding for the rest of the round, but the player still pays the winner if someone else wins.</p>
 
-      <p style="margin-top:24px; padding:16px; background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 4px;"><strong>House rules vary widely</strong> on dead-hand penalties, payment doubling, and joker bonuses. Settle these before your first family game and write them down. Common conventions are listed in NMJL's <em>Mah Jongg: Made in America</em> rulebook, but a friendly table can play it any way it likes.</p>
+      <h3>Three dead hands = wall game</h3>
+      <p>If three of the four hands become dead during a round (and not because of a Mah Jongg-in-error situation), the surviving player throws in their hand and <strong>nobody gets paid</strong>. Round over, no winner.</p>
+
+      <h3>Mah Jongg in error — verify before you mix</h3>
+      <p style="padding: 12px; background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 4px;"><strong>RULE: Players should NOT throw in their hands until Mah Jongg is verified.</strong> When someone calls Mah Jongg, everyone freezes and confirms the hand matches the card. If it doesn't:</p>
+      <ul>
+        <li>If the declarer didn't expose their hand (and no one else exposed), play continues with no penalty.</li>
+        <li>If the declarer exposed an incorrect hand and one other player also exposed in response, the game continues with the two players who kept their tiles intact. The erring declarer <strong>pays double the value</strong> of the incorrect hand to the one player whose hand is still intact.</li>
+        <li>If more than one other player exposed in response, the game cannot continue.</li>
+      </ul>
+
+      <p style="margin-top:24px; padding:16px; background: var(--bg-soft); border-left: 4px solid var(--accent); border-radius: 4px;"><strong>The official rules cover more than you might expect.</strong> Misnamed-tile penalties, jokerless doublers, and dead-hand mechanics are all printed on the back of the 2026 card. The NMJL rule book <em>Mah Jongg Made Easy</em> covers edge cases (etiquette, redealing, dispute resolution) — order it from the league if you want the full reference. For your first few family games, follow the card and the cheat sheet; you'll be on solid ground.</p>
     `
   },
   {
